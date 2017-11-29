@@ -1169,6 +1169,19 @@ def tf_custom_op_library_additional_deps():
       "@nsync//:nsync_headers",
       clean_dep("//third_party/eigen3"),
       clean_dep("//tensorflow/core:framework_headers_lib"),
+  ] + if_windows(["//tensorflow/python:pywrap_tensorflow_import_lib"])
+
+def tf_custom_op_library_additional_deps_impl():
+  return [
+      "@protobuf_archive//:protobuf",
+      "@nsync//:nsync_cpp",
+      clean_dep("//third_party/eigen3"),
+      clean_dep("//tensorflow/core:framework"),
+      clean_dep("//tensorflow/core:reader_base"),
+      # for contrib/batching
+      clean_dep("//tensorflow/core/kernels:concat_lib"),
+      clean_dep("//tensorflow/core/kernels:ops_util"),
+      clean_dep("//tensorflow/core/kernels:split_lib"),
   ]
 
 # Traverse the dependency graph along the "deps" attribute of the
@@ -1255,6 +1268,7 @@ def tf_custom_op_library(name, srcs=[], gpu_srcs=[], deps=[], linkopts=[]):
       deps=deps + if_cuda(cuda_deps),
       data=[name + "_check_deps"],
       copts=tf_copts(is_external=True),
+      features = ["windows_export_all_symbols"],
       linkopts=linkopts + select({
           "//conditions:default": [
               "-lm",
@@ -1348,7 +1362,8 @@ def tf_py_wrap_cc(name,
       ]) + tf_extension_copts()),
       linkopts=tf_extension_linkopts() + extra_linkopts,
       linkstatic=1,
-      deps=deps + extra_deps)
+      deps=deps + extra_deps,
+      **kwargs)
   native.genrule(
       name="gen_" + cc_library_pyd_name,
       srcs=[":" + cc_library_name],

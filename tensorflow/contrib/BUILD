@@ -7,6 +7,7 @@ package(default_visibility = ["//tensorflow:__subpackages__"])
 
 load("//third_party/mpi:mpi.bzl", "if_mpi")
 load("@local_config_cuda//cuda:build_defs.bzl", "if_cuda")
+load("//tensorflow:tensorflow.bzl", "if_not_windows")
 
 py_library(
     name = "contrib_py",
@@ -20,9 +21,9 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         "//tensorflow/contrib/all_reduce",
-        "//tensorflow/contrib/batching:batch_py",
+        "//tensorflow/contrib/batching:batch_py", # extra dependencies for contrib/batching, see tf_custom_op_library_additional_impl_deps
         "//tensorflow/contrib/bayesflow:bayesflow_py",
-        "//tensorflow/contrib/boosted_trees:init_py",
+        "//tensorflow/contrib/boosted_trees:init_py", # Fixed compiling issue
         "//tensorflow/contrib/cloud:cloud_py",
         "//tensorflow/contrib/cluster_resolver:cluster_resolver_py",
         "//tensorflow/contrib/coder:coder_ops_py",
@@ -33,10 +34,9 @@ py_library(
         "//tensorflow/contrib/data",
         "//tensorflow/contrib/deprecated:deprecated_py",
         "//tensorflow/contrib/distributions:distributions_py",
-        "//tensorflow/contrib/eager/python:tfe",
+        "//tensorflow/contrib/eager/python:tfe", # depend on contrib/data/_prefetching_ops.so, need export extra symbols from protobuf, see def_file_filter.py
         "//tensorflow/contrib/estimator:estimator_py",
         "//tensorflow/contrib/factorization:factorization_py",
-        "//tensorflow/contrib/ffmpeg:ffmpeg_ops_py",
         "//tensorflow/contrib/framework:framework_py",
         "//tensorflow/contrib/fused_conv:fused_conv_py",
         "//tensorflow/contrib/gan",
@@ -60,7 +60,6 @@ py_library(
         "//tensorflow/contrib/linalg:linalg_py",
         "//tensorflow/contrib/linear_optimizer:sdca_estimator_py",
         "//tensorflow/contrib/linear_optimizer:sdca_ops_py",
-        "//tensorflow/contrib/lite/python:lite",
         "//tensorflow/contrib/lookup:lookup_py",
         "//tensorflow/contrib/losses:losses_py",
         "//tensorflow/contrib/losses:metric_learning_py",
@@ -95,7 +94,7 @@ py_library(
         "//tensorflow/contrib/stat_summarizer:stat_summarizer_py",
         "//tensorflow/contrib/stateless",
         "//tensorflow/contrib/summary:summary",
-        "//tensorflow/contrib/tensor_forest:init_py",
+        "//tensorflow/contrib/tensor_forest:init_py", # public: static unsigned __int64 const tensorflow::StringPiece::npos, treak the stringpiece.cc/.h
         "//tensorflow/contrib/tensorboard",
         "//tensorflow/contrib/testing:testing_py",
         "//tensorflow/contrib/text:text_py",
@@ -106,7 +105,11 @@ py_library(
         "//tensorflow/contrib/training:training_py",
         "//tensorflow/contrib/util:util_py",
         "//tensorflow/python:util",
-    ] + if_mpi(["//tensorflow/contrib/mpi_collectives:mpi_collectives_py"]),
+    ] + if_mpi(["//tensorflow/contrib/mpi_collectives:mpi_collectives_py"])
+      + if_not_windows([
+        "//tensorflow/contrib/ffmpeg:ffmpeg_ops_py", # unix dependency, fix code
+        "//tensorflow/contrib/lite/python:lite", # unix dependency, fix code
+    ]),
 )
 
 cc_library(

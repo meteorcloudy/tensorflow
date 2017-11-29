@@ -25,6 +25,7 @@ load("//tensorflow:tensorflow.bzl", "py_tests")
 load("//tensorflow:tensorflow.bzl", "tf_py_build_info_genrule")
 load("//tensorflow:tensorflow.bzl", "tf_py_wrap_cc")
 load("//tensorflow:tensorflow.bzl", "tf_cc_shared_object")
+load("//tensorflow:tensorflow.bzl", "tf_custom_op_library_additional_deps_impl")
 load("//tensorflow:tensorflow.bzl", "cuda_py_test")
 load("//tensorflow:tensorflow.bzl", "cuda_py_tests")
 load("//tensorflow/core:platform/default/build_config.bzl", "pyx_library")
@@ -113,9 +114,8 @@ py_library(
         "//tensorflow/python/ops/linalg",
         "//tensorflow/python/profiler",
         "//tensorflow/python/saved_model",
-    ] + if_not_windows([
         "//tensorflow/contrib:contrib_py",
-    ]),
+    ],
 )
 
 tf_py_build_info_genrule()
@@ -3210,6 +3210,45 @@ tf_py_wrap_cc(
          tf_additional_verbs_deps() +
          tf_additional_mpi_deps() +
          tf_additional_gdr_deps()),
+    win_def_file = ":pywrap_tensorflow_filtered_def_file",
+)
+
+cc_binary(
+  name = "tf_custom_op_library_additional_deps.so",
+  deps = tf_custom_op_library_additional_deps_impl(),
+  linkstatic = 1,
+  linkshared = 1,
+)
+
+filegroup(
+  name = "pywrap_tensorflow_def_file",
+  srcs = [":tf_custom_op_library_additional_deps.so"],
+  output_group = "def_file",
+)
+
+genrule(
+  name = "pywrap_tensorflow_filtered_def_file",
+  srcs = [":pywrap_tensorflow_def_file"],
+  outs = ["pywrap_tensorflow_filtered_def_file.def"],
+  cmd = """
+        $(location @local_config_def_file_filter//:def_file_filter) \\
+        --input $(location :pywrap_tensorflow_def_file) \\
+        --output $@ \\
+        --target _pywrap_tensorflow_internal.pyd
+        """,
+  tools = ["@local_config_def_file_filter//:def_file_filter"],
+)
+
+filegroup(
+  name = "pywrap_tensorflow_import_lib_file",
+  srcs = [":_pywrap_tensorflow_internal.so"],
+  output_group = "interface_library",
+)
+
+cc_import(
+  name = "pywrap_tensorflow_import_lib",
+  interface_library = ":pywrap_tensorflow_import_lib_file",
+  system_provided = 1,
 )
 
 py_library(
