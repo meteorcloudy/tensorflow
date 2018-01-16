@@ -424,12 +424,14 @@ cuda_py_test(
         "//tensorflow/python:framework_test_lib",
         "//tensorflow/python:platform_test",
     ],
+    tags = ["no_windows"], # TODO: needs investigation on Windows
 )
 
 cuda_py_test(
     name = "independent_test",
     size = "small",
     srcs = ["python/kernel_tests/independent_test.py"],
+    tags = ["no_windows"],
     additional_deps = [
         ":distributions_py",
         "//third_party/py/numpy",
@@ -1015,6 +1017,7 @@ cuda_py_test(
         "//tensorflow/python:math_ops",
         "//tensorflow/python:platform_test",
     ],
+    tags = ["no_windows"], # TODO: needs investigation on Windows
 )
 
 cuda_py_test(
@@ -1042,6 +1045,7 @@ cuda_py_test(
     name = "sinh_arcsinh_bijector_test",
     size = "small",
     srcs = ["python/kernel_tests/bijectors/sinh_arcsinh_bijector_test.py"],
+    tags = ["no_windows"],
     additional_deps = [
         ":bijectors_py",
         ":distributions_py",

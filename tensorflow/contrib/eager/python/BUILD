@@ -235,6 +235,7 @@ py_test(
     name = "checkpointable_test",
     srcs = ["checkpointable_test.py"],
     srcs_version = "PY2AND3",
+    tags = ["no_windows"], # TODO: needs investigation on Windows
     deps = [
         ":checkpointable",
         ":network",
