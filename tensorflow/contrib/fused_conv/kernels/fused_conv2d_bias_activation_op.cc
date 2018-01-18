@@ -42,8 +42,9 @@ limitations under the License.
 
 namespace tensorflow {
 
-namespace {
 typedef Eigen::GpuDevice GPUDevice;
+
+namespace {
 
 template <typename T>
 struct RawType {
