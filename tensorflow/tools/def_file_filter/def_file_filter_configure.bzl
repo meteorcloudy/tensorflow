@@ -15,6 +15,10 @@ load("@bazel_tools//tools/cpp:windows_cc_configure.bzl", "find_msvc_tool")
 load("@bazel_tools//tools/cpp:lib_cc_configure.bzl", "auto_configure_fail")
 
 def _def_file_filter_configure_impl(repository_ctx):
+  if repository_ctx.os.name.lower().find("windows") == -1:
+    repository_ctx.symlink(Label("//tensorflow/tools/def_file_filter:BUILD.tpl"), "BUILD")
+    repository_ctx.file("def_file_filter.py", "")
+    return
   vc_path = find_vc_path(repository_ctx)
   if vc_path == "visual-studio-not-found":
     auto_configure_fail("Visual C++ build tools not found on your machine")
