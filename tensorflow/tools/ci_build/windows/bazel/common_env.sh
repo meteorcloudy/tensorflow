@@ -49,3 +49,14 @@ export PATH="/c/Program Files/Git/cmd:$PATH"
 
 # Make sure we have pip in PATH
 export PATH="/c/${PYTHON_BASE_PATH}/Scripts:$PATH"
+
+export TF_CUDA_VERSION=9.1
+export TF_CUDNN_VERSION=7.0
+export TF_CUDA_COMPUTE_CAPABILITIES=3.7
+export CUDA_INSTALL_PATH="/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v${TF_CUDA_VERSION}"
+export CUDNN_INSTALL_PATH="/c/tools/cuda"
+
+# Add Cuda and Cudnn dll directories into PATH	
+export PATH="${CUDA_INSTALL_PATH}/bin:$PATH"
+export PATH="${CUDA_INSTALL_PATH}/extras/CUPTI/libx64:$PATH"
+export PATH="${CUDNN_INSTALL_PATH}/bin:$PATH"
