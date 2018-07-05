@@ -34,14 +34,15 @@ CPU_COMPILER = ('%{cpu_compiler}')
 GCC_HOST_COMPILER_PATH = ('%{cpu_compiler}')
 
 NVCC_PATH = '%{nvcc_path}'
-PREFIX_DIR = os.path.dirname(GCC_HOST_COMPILER_PATH)
 NVCC_VERSION = '%{cuda_version}'
+NVCC_TEMP_DIR = "%{nvcc_tmp_dir}"
+supported_cuda_compute_capabilities = [ %{cuda_compute_capabilities} ]
 
 def Log(s):
   print('gpus/crosstool: {0}'.format(s))
 
 
-def GetOptionValue(option):
+def GetOptionValue(argv, option):
   """Extract the list of values for option from options.
 
   Args:
@@ -56,7 +57,7 @@ def GetOptionValue(option):
 
   parser = ArgumentParser(prefix_chars='/')
   parser.add_argument('/' + option, nargs='*', action='append')
-  args, leftover = parser.parse_known_args(options)
+  args, leftover = parser.parse_known_args(argv)
   if args and vars(args)[option]:
     return (sum(vars(args)[option], []), leftover)
   return ([], leftover)
@@ -114,18 +115,18 @@ def InvokeNvcc(argv, log=False):
 
   nvcc_compiler_options, argv = GetNvccOptions(argv)
 
-  opt_option, argv = GetOptionValue('O', argv)
+  opt_option, argv = GetOptionValue(argv, 'O')
   opt = ['-g', '-G']
   if (len(opt_option) > 0 and opt_option[0] != 'd'):
     opt = ['-O2']
 
-  include_options, argv = GetOptionValue('I', argv)
+  include_options, argv = GetOptionValue(argv, 'I')
   includes = ["-I " + include for include in include_options]
 
-  defines, argv = GetOptionValue('D', argv)
+  defines, argv = GetOptionValue(argv, 'D')
   defines = ['-D' + define for define in defines]
 
-  undefines, argv = GetOptionValue('U', argv)
+  undefines, argv = GetOptionValue(argv, 'U')
   undefines = ['-U' + define for define in undefines]
 
   # The rest of the unrecongized options should be passed to host compiler
@@ -134,7 +135,6 @@ def InvokeNvcc(argv, log=False):
   m_options = ["-m64"]
 
   nvccopts = ['-D_FORCE_INLINES']
-  supported_cuda_compute_capabilities = [ %{cuda_compute_capabilities} ]
   for capability in supported_cuda_compute_capabilities:
     capability = capability.replace('.', '')
     nvccopts += [r'-gencode=arch=compute_%s,"code=sm_%s,compute_%s"' % (
