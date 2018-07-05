@@ -88,7 +88,7 @@ def get_win_cuda_defines(repository_ctx, is_windows):
     msvc_link_path = find_msvc_tool(repository_ctx, vc_path, "link.exe").replace("\\", "/")
     msvc_lib_path = find_msvc_tool(repository_ctx, vc_path, "lib.exe").replace("\\", "/")
 
-    # nvcc will generate some temporary source files under %{nvcc_tmp_dir_name}
+    # nvcc will generate some temporary source files under %{nvcc_tmp_dir}
     # The generated files are guranteed to have unique name, so they can share the same tmp directory
     escaped_cxx_include_directories = ["cxx_builtin_include_directory: \"%s\"" % get_nvcc_tmp_dir(repository_ctx)]
     for path in escaped_include_paths.split(";"):

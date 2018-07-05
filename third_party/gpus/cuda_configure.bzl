@@ -1139,7 +1139,7 @@ def _create_local_cuda_repository(repository_ctx):
          "%{nvcc_path}": nvcc_path,
          "%{cuda_compute_capabilities}": ", ".join(
              ["\"%s\"" % c for c in cuda_config.compute_capabilities]),
-         "%{nvcc_tmp_dir_name}": get_nvcc_tmp_dir(repository_ctx),
+         "%{nvcc_tmp_dir}": get_nvcc_tmp_dir(repository_ctx),
      })
     _tpl(repository_ctx,
      "crosstool:windows/wrapper/msvc_cl.bat",
