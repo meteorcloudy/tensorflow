@@ -229,7 +229,13 @@ def InvokeNvcc(argv, log=False):
   # Need to investigate and fix.
   cmd = 'PATH=' + PREFIX_DIR + ':$PATH ' + cmd
   if log: Log(cmd)
-  return os.system(cmd)
+  proc = subprocess.Popen(cmd,
+                          stdout=sys.stdout,
+                          stderr=sys.stderr,
+                          env=os.environ.copy(),
+                          shell=True)
+  proc.wait()
+  return proc.returncode
 
 
 def main():

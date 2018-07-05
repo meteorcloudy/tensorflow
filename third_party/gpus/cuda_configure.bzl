@@ -97,16 +97,21 @@ NVVM_LIBDEVICE_PATHS = [
 ]
 
 load("//third_party/clang_toolchain:download_clang.bzl", "download_clang")
+load(
+    "//third_party/gpus:win_cuda_toolchain_configure.bzl",
+    "find_python_on_windows",
+    "get_nvcc_tmp_dir",
+    "get_msvc_compiler",
+    "get_win_cuda_defines",
+)
 
 # TODO(dzc): Once these functions have been factored out of Bazel's
 # cc_configure.bzl, load them from @bazel_tools instead.
 # BEGIN cc_configure common functions.
 def find_cc(repository_ctx):
   """Find the C++ compiler."""
-  # On Windows, we use Bazel's MSVC CROSSTOOL for GPU build
-  # Return a dummy value for GCC detection here to avoid error
   if _is_windows(repository_ctx):
-    return "/use/--config=win-cuda --cpu=x64_windows_msvc/instead"
+    return get_msvc_compiler(repository_ctx)
 
   if _use_cuda_clang(repository_ctx):
     target_cc_name = "clang"
@@ -1082,8 +1087,10 @@ def _create_local_cuda_repository(repository_ctx):
         flag: "-Wno-invalid-partial-specialization"
     """
     cuda_defines["%{host_compiler_includes}"] = host_compiler_includes
-    _tpl(repository_ctx, "crosstool:BUILD", {"%{linker_files}": ":empty"})
+    _tpl(repository_ctx, "crosstool:BUILD", {"%{linker_files}": ":empty", "%{win_linker_files}": ":empty"})
     repository_ctx.file("crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc", "")
+    repository_ctx.file("crosstool/windows/wrapper/msvc_cl.bat", "")
+    repository_ctx.file("crosstool/windows/wrapper/msvc_cl.py", "")
   else:
     cuda_defines["%{host_compiler_path}"] = "clang/bin/crosstool_wrapper_driver_is_not_gcc"
     cuda_defines["%{host_compiler_warnings}"] = ""
@@ -1110,9 +1117,10 @@ def _create_local_cuda_repository(repository_ctx):
     cuda_defines["%{host_compiler_includes}"] = "\n  cxx_builtin_include_directory: \"/\""
     nvcc_path = str(repository_ctx.path("%s/bin/nvcc%s" %
         (cuda_config.cuda_toolkit_path,
-        ".exe" if cuda_config.cpu_value == "Windows" else "")))
+        ".exe" if _is_windows(repository_ctx) else "")))
     _tpl(repository_ctx, "crosstool:BUILD",
-         {"%{linker_files}": ":crosstool_wrapper_driver_is_not_gcc"})
+         {"%{linker_files}": ":crosstool_wrapper_driver_is_not_gcc",
+          "%{win_linker_files}": ":windows_msvc_wrapper_files"})
     _tpl(repository_ctx,
          "crosstool:clang/bin/crosstool_wrapper_driver_is_not_gcc",
          {
@@ -1123,7 +1131,25 @@ def _create_local_cuda_repository(repository_ctx):
              "%{cuda_compute_capabilities}": ", ".join(
                  ["\"%s\"" % c for c in cuda_config.compute_capabilities]),
          })
-  _tpl(repository_ctx, "crosstool:CROSSTOOL", cuda_defines, out="crosstool/CROSSTOOL")
+    _tpl(repository_ctx,
+     "crosstool:windows/wrapper/msvc_cl.py",
+     {
+         "%{cpu_compiler}": str(cc),
+         "%{cuda_version}": cuda_config.cuda_version,
+         "%{nvcc_path}": nvcc_path,
+         "%{cuda_compute_capabilities}": ", ".join(
+             ["\"%s\"" % c for c in cuda_config.compute_capabilities]),
+         "%{nvcc_tmp_dir_name}": get_nvcc_tmp_dir(repository_ctx),
+     })
+    _tpl(repository_ctx,
+     "crosstool:windows/wrapper/msvc_cl.bat",
+     {
+         "%{python_binary}": find_python_on_windows(repository_ctx)
+     })
+
+  _tpl(repository_ctx, "crosstool:CROSSTOOL",
+       cuda_defines + get_win_cuda_defines(repository_ctx, _is_windows(repository_ctx)),
+       out="crosstool/CROSSTOOL")
 
   # Set up cuda_config.h, which is used by
   # tensorflow/stream_executor/dso_loader.cc.
