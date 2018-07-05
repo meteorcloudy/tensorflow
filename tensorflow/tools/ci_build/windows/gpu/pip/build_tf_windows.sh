@@ -89,7 +89,7 @@ fi
 
 run_configure_for_gpu_build
 
-bazel build --announce_rc --config=opt tensorflow/tools/pip_package:build_pip_package || exit $?
+bazel build --announce_rc --config=opt --nolegacy_whole_archive tensorflow/tools/pip_package:build_pip_package || exit $?
 
 if [[ "$skip_test" == 1 ]]; then
   exit 0

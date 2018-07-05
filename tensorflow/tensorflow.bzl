@@ -946,7 +946,7 @@ register_extension_info(
     label_regex_for_dep = "{extension_name}",
 )
 
-def tf_cuda_library(deps=None, cuda_deps=None, copts=tf_copts(), **kwargs):
+def tf_cuda_library(deps=None, cuda_deps=None, copts=tf_copts(), alwayslink=1, **kwargs):
   """Generate a cc_library with a conditional set of CUDA dependencies.
 
   When the library is built with --config=cuda:
@@ -977,6 +977,7 @@ def tf_cuda_library(deps=None, cuda_deps=None, copts=tf_copts(), **kwargs):
       ]),
       copts=(copts + if_cuda(["-DGOOGLE_CUDA=1"]) + if_mkl(["-DINTEL_MKL=1"]) +
              if_tensorrt(["-DGOOGLE_TENSORRT=1"])),
+      alwayslink = alwayslink,
       **kwargs)
 
 register_extension_info(
