@@ -1063,7 +1063,8 @@ def _create_local_cuda_repository(repository_ctx):
            "%{cupti_lib}": cuda_libs["cupti"].file_name,
            "%{cuda_include_genrules}": "\n".join(genrules),
            "%{cuda_headers}": ('":cuda-include",\n' +
-                               '        ":cudnn-include",')
+                               '        ":cudnn-include",'),
+           "%{library_attribute_name}": "interface_library" if _is_windows(repository_ctx) else "shared_library",
        })
 
   is_cuda_clang = _use_cuda_clang(repository_ctx)
