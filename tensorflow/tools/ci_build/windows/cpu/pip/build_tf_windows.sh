@@ -70,12 +70,8 @@ if [[ "$release_build" != 1 ]]; then
   # --define=override_eigen_strong_inline=true speeds up the compiling of conv_grad_ops_3d.cc and conv_ops_3d.cc
   # by 20 minutes. See https://github.com/tensorflow/tensorflow/issues/10521
   # Because this hurts the performance of TF, we don't enable it in release build.
-  echo "build --define=override_eigen_strong_inline=true" >> "${TMP_BAZELRC}"
+  export TF_DISABLE_EIGEN_STRONG_INLINE=0
 fi
-
-# The host and target platforms are the same in Windows build. So we don't have
-# to distinct them. This helps avoid building the same targets twice.
-echo "build --distinct_host_configuration=false" >> "${TMP_BAZELRC}"
 
 # Enable short object file path to avoid long path issue on Windows.
 echo "startup --output_user_root=${TMPDIR}" >> "${TMP_BAZELRC}"
