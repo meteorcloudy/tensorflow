@@ -1687,6 +1687,20 @@ register_extension_info(
     label_regex_for_dep = "{extension_name}",
 )
 
+def py_binary(deps = [], **kwargs):
+    native.py_binary(
+        deps = select({
+            "//conditions:default": deps,
+            clean_dep("//tensorflow:no_tensorflow_py_deps"): [],
+        }),
+        **kwargs
+    )
+
+register_extension_info(
+    extension_name = "py_binary",
+    label_regex_for_dep = "{extension_name}",
+)
+
 def tf_py_test(
         name,
         srcs,
