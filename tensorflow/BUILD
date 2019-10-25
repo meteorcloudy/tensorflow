@@ -591,6 +591,12 @@ tf_cc_shared_object(
             "-Wl,--version-script,$(location //tensorflow:tf_framework_version_script.lds)",
         ],
     }),
+    # add win_def_file for tensorflow
+    win_def_file = select({
+        # We need this DEF file to properly export symbols on Windows
+        "//tensorflow:windows": ":tensorflow_filtered_def_file",
+        "//conditions:default": None,
+    }),
     linkstatic = 1,
     per_os_targets = True,
     soversion = VERSION,
