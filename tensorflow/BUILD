@@ -806,18 +806,33 @@ filegroup(
     output_group = "def_file",
 )
 
+filegroup(
+    name = "cc_ops_def_file",
+    srcs = [
+        "//tensorflow/cc:cc_ops",
+        "//tensorflow/cc:array_ops",
+        "//tensorflow/cc:const_op",
+        "//tensorflow/cc:math_ops",
+    ],
+    output_group = "def_file",
+)
+
 # Filter the DEF file to reduce the number of symbols to 64K or less.
 # Note that we also write the name of the pyd file into DEF file so that
 # the dynamic libraries of custom ops can find it at runtime.
 genrule(
     name = "tensorflow_filtered_def_file",
-    srcs = [":tensorflow_def_file"],
+    srcs = [
+        ":tensorflow_def_file",
+        ":cc_ops_def_file",
+    ],
     outs = ["tensorflow_filtered_def_file.def"],
     cmd = select({
-        "//tensorflow:windows": """
-              $(location @local_config_def_file_filter//:def_file_filter) \\
-              --input $(location :tensorflow_def_file) \\
-              --output $@
+        "//tensorflow:windows": """\r
+\t      DEF_FILES="$(locations :cc_ops_def_file)" &&\r
+              $(location @local_config_def_file_filter//:def_file_filter) \\\r
+              --input="$(location :tensorflow_def_file);$${DEF_FILES// /;}" \\\r
+              --output $@\r
           """,
         "//conditions:default": "touch $@",  # Just a placeholder for Unix platforms
     }),
