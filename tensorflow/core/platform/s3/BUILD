@@ -49,6 +49,7 @@ cc_library(
     hdrs = [
         "aws_crypto.h",
     ],
+    copts = ["-isystem", "/usr/include/android"],
     deps = [
         "@aws",
         "@boringssl//:crypto",

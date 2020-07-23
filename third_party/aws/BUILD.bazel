@@ -67,6 +67,8 @@ cc_library(
         "aws-cpp-sdk-core/include/aws/core/SDKConfig.h",
     ],
     copts = [
+        "-isystem",
+        "/usr/include/android",
         "-DENABLE_OPENSSL_ENCRYPTION",
         "-DAWS_SDK_VERSION_MAJOR=1",
         "-DAWS_SDK_VERSION_MINOR=7",
