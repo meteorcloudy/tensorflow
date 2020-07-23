@@ -20,38 +20,38 @@ tf_repositories()
 
 register_toolchains("@local_config_python//:py_toolchain")
 
-load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
+#load("@io_bazel_rules_closure//closure:defs.bzl", "closure_repositories")
+#
+#closure_repositories()
 
-closure_repositories()
+# load("//third_party/toolchains/preconfig/generate:archives.bzl",
+#     "bazel_toolchains_archive")
 
-load("//third_party/toolchains/preconfig/generate:archives.bzl",
-     "bazel_toolchains_archive")
+# bazel_toolchains_archive()
 
-bazel_toolchains_archive()
+#load(
+#    "@bazel_toolchains//repositories:repositories.bzl",
+#    bazel_toolchains_repositories = "repositories",
+#)
+#
+# bazel_toolchains_repositories()
 
-load(
-    "@bazel_toolchains//repositories:repositories.bzl",
-    bazel_toolchains_repositories = "repositories",
-)
+#load(
+#    "@io_bazel_rules_docker//repositories:repositories.bzl",
+#    container_repositories = "repositories",
+#)
+#
+#container_repositories()
 
-bazel_toolchains_repositories()
-
-load(
-    "@io_bazel_rules_docker//repositories:repositories.bzl",
-    container_repositories = "repositories",
-)
-
-container_repositories()
-
-load("//third_party/toolchains/preconfig/generate:workspace.bzl",
-     "remote_config_workspace")
-
-remote_config_workspace()
+#load("//third_party/toolchains/preconfig/generate:workspace.bzl",
+#     "remote_config_workspace")
+#
+#remote_config_workspace()
 
 # Use `swift_rules_dependencies` to fetch the toolchains. With the
 # `git_repository` rules above, the following call will skip redefining them.
-load("@build_bazel_rules_swift//swift:repositories.bzl", "swift_rules_dependencies")
-swift_rules_dependencies()
+# load("@build_bazel_rules_swift//swift:repositories.bzl", "swift_rules_dependencies")
+# swift_rules_dependencies()
 
 # We must check the bazel version before trying to parse any other BUILD
 # files, in case the parsing of those build files depends on the bazel
@@ -59,11 +59,11 @@ swift_rules_dependencies()
 load("//tensorflow:version_check.bzl", "check_bazel_version_at_least")
 check_bazel_version_at_least("1.0.0")
 
-load("//third_party/android:android_configure.bzl", "android_configure")
-android_configure(name="local_config_android")
-load("@local_config_android//:android.bzl", "android_workspace")
-android_workspace()
-
+# load("//third_party/android:android_configure.bzl", "android_configure")
+# android_configure(name="local_config_android")
+# load("@local_config_android//:android.bzl", "android_workspace")
+# android_workspace()
+# 
 # If a target is bound twice, the later one wins, so we have to do tf bindings
 # at the end of the WORKSPACE file.
 load("//tensorflow:workspace.bzl", "tf_bind")
@@ -120,19 +120,19 @@ load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
 
 grpc_deps()
 
-load(
-    "@build_bazel_rules_apple//apple:repositories.bzl",
-    "apple_rules_dependencies",
-)
-
-apple_rules_dependencies()
-
-load(
-    "@build_bazel_apple_support//lib:repositories.bzl",
-    "apple_support_dependencies",
-)
-
-apple_support_dependencies()
+# load(
+#     "@build_bazel_rules_apple//apple:repositories.bzl",
+#     "apple_rules_dependencies",
+# )
+# 
+# apple_rules_dependencies()
+# 
+# load(
+#     "@build_bazel_apple_support//lib:repositories.bzl",
+#     "apple_support_dependencies",
+# )
+# 
+# apple_support_dependencies()
 
 load("@upb//bazel:repository_defs.bzl", "bazel_version_repository")
 

@@ -16,7 +16,7 @@ load("//third_party:repo.bzl", "tf_http_archive")
 load("//third_party/clang_toolchain:cc_configure_clang.bzl", "cc_download_clang_toolchain")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 load("@bazel_tools//tools/build_defs/repo:java.bzl", "java_import_external")
-load("@io_bazel_rules_closure//closure:defs.bzl", "filegroup_external")
+# load("@io_bazel_rules_closure//closure:defs.bzl", "filegroup_external")
 load(
     "//tensorflow/tools/def_file_filter:def_file_filter_configure.bzl",
     "def_file_filter_configure",
@@ -363,16 +363,16 @@ def tf_repositories(path_prefix = "", tf_repo_name = ""):
         ],
     )
 
-    filegroup_external(
-        name = "astunparse_license",
-        licenses = ["notice"],  # PSFL
-        sha256_urls = {
-            "92fc0e4f4fa9460558eedf3412b988d433a2dcbb3a9c45402a145a4fab8a6ac6": [
-                "https://storage.googleapis.com/mirror.tensorflow.org/raw.githubusercontent.com/simonpercivall/astunparse/v1.6.2/LICENSE",
-                "https://raw.githubusercontent.com/simonpercivall/astunparse/v1.6.2/LICENSE",
-            ],
-        },
-    )
+    #filegroup_external(
+    #    name = "astunparse_license",
+    #    licenses = ["notice"],  # PSFL
+    #    sha256_urls = {
+    #        "92fc0e4f4fa9460558eedf3412b988d433a2dcbb3a9c45402a145a4fab8a6ac6": [
+    #            "https://storage.googleapis.com/mirror.tensorflow.org/raw.githubusercontent.com/simonpercivall/astunparse/v1.6.2/LICENSE",
+    #            "https://raw.githubusercontent.com/simonpercivall/astunparse/v1.6.2/LICENSE",
+    #        ],
+    #    },
+    #)
 
     tf_http_archive(
         name = "functools32_archive",
@@ -461,16 +461,16 @@ def tf_repositories(path_prefix = "", tf_repo_name = ""):
         ],
     )
 
-    filegroup_external(
-        name = "org_python_license",
-        licenses = ["notice"],  # Python 2.0
-        sha256_urls = {
-            "e76cacdf0bdd265ff074ccca03671c33126f597f39d0ed97bc3e5673d9170cf6": [
-                "https://storage.googleapis.com/mirror.tensorflow.org/docs.python.org/2.7/_sources/license.rst.txt",
-                "https://docs.python.org/2.7/_sources/license.rst.txt",
-            ],
-        },
-    )
+    #filegroup_external(
+    #    name = "org_python_license",
+    #    licenses = ["notice"],  # Python 2.0
+    #    sha256_urls = {
+    #        "e76cacdf0bdd265ff074ccca03671c33126f597f39d0ed97bc3e5673d9170cf6": [
+    #            "https://storage.googleapis.com/mirror.tensorflow.org/docs.python.org/2.7/_sources/license.rst.txt",
+    #            "https://docs.python.org/2.7/_sources/license.rst.txt",
+    #        ],
+    #    },
+    #)
 
     # 310ba5ee72661c081129eb878c1bbcec936b20f0 is based on 3.8.0 with a fix for protobuf.bzl.
     PROTOBUF_URLS = [
