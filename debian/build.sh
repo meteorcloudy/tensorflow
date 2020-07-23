@@ -24,13 +24,15 @@ export PYTHON_BIN_PATH=/usr/bin/python3
 
 # yes "" | ./configure
 
+# To be enabled
+# re2, boringssl
 bazel build \
     -k \
     --verbose_failures \
     --repository_cache= \
     --config=opt \
     --distdir=./debian/dist \
-    --repo_env=TF_SYSTEM_LIBS=nsync,curl,boringssl,double_conversion,snappy,gif,zlib \
+    --repo_env=TF_SYSTEM_LIBS=nsync,curl,double_conversion,snappy,gif,zlib \
     //tensorflow:tensorflow_framework
 
 # Revert files after build
