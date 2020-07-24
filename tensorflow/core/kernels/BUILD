@@ -1,4 +1,4 @@
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
+# load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load(
     "//tensorflow:tensorflow.bzl",
     "cc_header_only_library",
@@ -6959,10 +6959,10 @@ cc_library(
     alwayslink = 1,
 )
 
-build_test(
-    name = "android_tensorflow_kernels_build_test",
-    targets = [":android_tensorflow_kernels"],
-)
+# build_test(
+#     name = "android_tensorflow_kernels_build_test",
+#     targets = [":android_tensorflow_kernels"],
+# )
 
 cc_library(
     name = "android_tensorflow_image_op",
@@ -6979,10 +6979,10 @@ cc_library(
     alwayslink = 1,
 )
 
-build_test(
-    name = "android_tensorflow_image_op_build_test",
-    targets = [":android_tensorflow_image_op"],
-)
+# build_test(
+#     name = "android_tensorflow_image_op_build_test",
+#     targets = [":android_tensorflow_image_op"],
+# )
 
 cc_library(
     name = "android_whole_file_read_ops",
