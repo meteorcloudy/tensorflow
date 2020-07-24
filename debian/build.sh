@@ -32,7 +32,10 @@ bazel build \
     --repository_cache= \
     --config=opt \
     --distdir=./debian/dist \
-    --repo_env=TF_SYSTEM_LIBS=nsync,curl,double_conversion,snappy,gif,zlib \
+    --repo_env=TF_SYSTEM_LIBS=nsync,curl,double_conversion,snappy,gif,zlib,com_google_protobuf,com_github_grpc_grpc \
+    --override_repository=bazel_skylib=$PWD/debian/mock_repos/bazel_skylib \
+    --override_repository=rules_cc=$PWD/debian/mock_repos/rules_cc \
+    --override_repository=rules_java=$PWD/debian/mock_repos/rules_java \
     //tensorflow:tensorflow_framework
 
 # Revert files after build
