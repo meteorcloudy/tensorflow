@@ -31,7 +31,7 @@ export PYTHON_BIN_PATH=/usr/bin/python3
 
 # To be enabled
 # re2, boringssl
-bazel build \
+/usr/bin/bazel build \
     -k \
     --verbose_failures \
     --repository_cache= \
