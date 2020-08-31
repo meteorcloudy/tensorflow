@@ -41,6 +41,7 @@ export PYTHON_BIN_PATH=/usr/bin/python3
     --override_repository=bazel_skylib=$PWD/debian/mock_repos/bazel_skylib \
     --override_repository=rules_cc=$PWD/debian/mock_repos/rules_cc \
     --override_repository=rules_java=$PWD/debian/mock_repos/rules_java \
+    --override_repository=farmhash_archive=$PWD/debian/dist/farmhash-816a4ae622e964763ca0862d9dbd19324a1eaf45 \
     //tensorflow:tensorflow_framework
 
 # Revert files after build
