@@ -217,6 +217,16 @@ cc_library(
 )
 
 tf_cc_binary(
+    name = "libtransform_graph.so",
+    copts = tf_copts(),
+    linkshared = 1,
+    visibility = ["//visibility:public"],
+    deps = [
+        ":transform_graph_lib",
+    ],
+)
+
+tf_cc_binary(
     name = "transform_graph",
     copts = tf_copts(),
     linkstatic = 1,
