@@ -129,7 +129,7 @@ cc_library(
         "//tensorflow/core:graph",
         "//tensorflow/core:lib",
         "//tensorflow/core:protos_all_cc",
-        "//tensorflow/core:tensorflow",
+        # "//tensorflow/core:tensorflow",
         "//tensorflow/contrib/rnn:gru_ops_op_lib",
         "//tensorflow/contrib/rnn:lstm_ops_op_lib",
         "//tensorflow/core/kernels:quantization_utils",

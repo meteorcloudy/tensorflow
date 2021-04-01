@@ -6021,7 +6021,7 @@ cc_library(
     ],
     deps = [
         ":remote_fused_graph_execute_utils",
-        "//tensorflow/cc:cc_ops",
+        # "//tensorflow/cc:cc_ops",
         "//tensorflow/cc:remote_fused_graph_ops",
         "//tensorflow/tools/graph_transforms:transform_utils",
     ],

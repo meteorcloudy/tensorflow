@@ -60,9 +60,9 @@ tf_kernel_library(
         "soc_interface.h",
     ],
     deps = [
-        "//tensorflow/cc:cc_ops",
+        # "//tensorflow/cc:cc_ops",
         "//tensorflow/cc:remote_fused_graph_ops",
-        "//tensorflow/cc:scope",
+        # "//tensorflow/cc:scope",
         "//tensorflow/core",
         "//tensorflow/core:core_cpu",
         "//tensorflow/core:framework",
@@ -80,7 +80,7 @@ cc_library(
     ],
     deps = [
         ":graph_transferer",
-        "//tensorflow/cc:cc_ops",
+        # "//tensorflow/cc:cc_ops",
         "//tensorflow/cc:remote_fused_graph_ops",
         "//tensorflow/tools/graph_transforms:transform_utils",
     ],

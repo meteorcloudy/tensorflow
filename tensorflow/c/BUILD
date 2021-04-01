@@ -138,10 +138,10 @@ exports_files(
 tf_cuda_library(
     name = "tf_status_helper",
     srcs = ["tf_status_helper.cc"],
-    hdrs = ["tf_status_helper.h"],
+    hdrs = ["tf_status_helper.h"] + [":headers"],
     visibility = ["//visibility:public"],
     deps = [
-        ":c_api",
+#        ":c_api",
         ":c_api_internal",
         "//tensorflow/core:lib",
     ],
