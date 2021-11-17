@@ -2762,7 +2762,7 @@ def pybind_extension(
         ],
         defines = defines,
         features = features + ["-use_header_modules"],
-        linkshared = 1,
+        # linkshared = 1,
         testonly = testonly,
         licenses = licenses,
         visibility = visibility,

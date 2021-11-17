@@ -3401,7 +3401,7 @@ genrule(
               $(location @local_config_def_file_filter//:def_file_filter) \\
               --input $(location //tensorflow:tensorflow_def_file) \\
               --output $@ \\
-              --target _pywrap_tensorflow_internal.pyd \\
+              --target _pywrap_tensorflow_internal.dll \\
               --symbols $(location //tensorflow/tools/def_file_filter:symbols_pybind) \\
               --lib_paths_file $(location :pybind_symbol_target_libs_file)
           """,
