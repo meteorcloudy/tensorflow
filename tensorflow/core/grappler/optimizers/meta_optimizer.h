@@ -35,6 +35,7 @@ namespace grappler {
 class MetaOptimizer : public GraphOptimizer {
  public:
   MetaOptimizer(DeviceBase* cpu_device, const ConfigProto& cfg);
+  MetaOptimizer(DeviceBase* cpu_device, const std::string& serialized_config_proto);
   ~MetaOptimizer() override = default;
 
   string name() const override { return "meta_optimizer"; };
@@ -96,7 +97,7 @@ class MetaOptimizer : public GraphOptimizer {
 
   DeviceBase* const cpu_device_;  // may be NULL
   ConfigProto config_proto_;
-  RewriterConfig& cfg_;
+  RewriterConfig cfg_;
   bool xla_auto_clustering_on_;
 
   struct OptimizerResult {

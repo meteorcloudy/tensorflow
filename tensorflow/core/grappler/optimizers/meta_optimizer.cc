@@ -248,14 +248,30 @@ std::unique_ptr<GraphOptimizer> MetaOptimizer::MakeNewOptimizer(
 #undef MK_OPT
 
 MetaOptimizer::MetaOptimizer(DeviceBase* cpu_device, const ConfigProto& cfg)
-    : cpu_device_(cpu_device),
-      config_proto_(cfg),
-      cfg_(*config_proto_.mutable_graph_options()->mutable_rewrite_options()) {
-  DCHECK(cpu_device_ == nullptr ||
-         cpu_device_->attributes().device_type() == "CPU");
-  auto global_jit_level =
-      cfg.graph_options().optimizer_options().global_jit_level();
-  xla_auto_clustering_on_ = IsXlaGlobalJitOn(global_jit_level);
+    :
+      cpu_device_(cpu_device),
+      config_proto_(cfg)
+       {
+   cfg_ = *config_proto_.mutable_graph_options()->mutable_rewrite_options();
+  // cpu_device_ = cpu_device;
+  // DCHECK(cpu_device_ == nullptr ||
+  //        cpu_device_->attributes().device_type() == "CPU");
+  // auto global_jit_level =
+  //     cfg.graph_options().optimizer_options().global_jit_level();
+  // xla_auto_clustering_on_ = IsXlaGlobalJitOn(global_jit_level);
+  std::cout << "Hello world" << std::endl;
+}
+
+MetaOptimizer::MetaOptimizer(DeviceBase* cpu_device, const std::string& serialized_config_proto):
+ cpu_device_(nullptr) {
+  // config_proto_.ParseFromString(serialized_config_proto);
+  // cfg_ = *config_proto_.mutable_graph_options()->mutable_rewrite_options();
+  // DCHECK(cpu_device_ == nullptr ||
+  //        cpu_device_->attributes().device_type() == "CPU");
+  // auto global_jit_level =
+  //     cfg.graph_options().optimizer_options().global_jit_level();
+  // xla_auto_clustering_on_ = IsXlaGlobalJitOn(global_jit_level);
+  std::cout << "Hello world" << std::endl;
 }
 
 Status MetaOptimizer::InitializeOptimizers(
