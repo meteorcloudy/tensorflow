@@ -135,7 +135,7 @@ py_strict_library(
         "//tensorflow/lite/python:schema_py",
         "//tensorflow/lite/python:schema_util",
         "//tensorflow/python/platform:gfile",
-        "@pypi_flatbuffers//:pkg",
+        "@pypi//flatbuffers",
     ],
 )
 
@@ -157,7 +157,11 @@ py_strict_library(
     srcs = ["test_utils.py"],
     deps = [
         "//tensorflow/lite/python:schema_py",
+<<<<<<< HEAD
         "@pypi_flatbuffers//:pkg",
+=======
+        "@pypi//flatbuffers",
+>>>>>>> 771604ee8aa (Support bzlmod)
     ],
 )
 
